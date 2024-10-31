@@ -1,0 +1,37 @@
+model
+  schema 1.1
+
+type system # required
+  relations
+    define admin: [application] # required
+    define can_call_create_stores: admin # required
+    define can_call_list_stores: [application, application:*] or admin # required
+
+type application # required
+
+type store # required
+  relations
+    define system: [system] # required
+    define admin: [application] or admin from system # required
+    define model_writer: [application] or admin
+    define reader: [application] or admin
+    define writer: [application] or admin
+    define can_call_delete_store: admin # required
+    define can_call_get_store: reader or writer or model_writer # required
+    define can_call_check: reader # required
+    define can_call_expand: reader # required
+    define can_call_list_objects: reader # required
+    define can_call_list_users: reader # required
+    define can_call_read: reader # required
+    define can_call_read_assertions: reader or model_writer # required
+    define can_call_read_authorization_models: reader or model_writer # required
+    define can_call_read_changes: reader # required
+    define can_call_write: writer # required
+    define can_call_write_assertions: model_writer # required
+    define can_call_write_authorization_models: model_writer # required
+
+type module # required
+  relations
+    define store: [store] # required
+    define writer: [application]
+    define can_call_write: writer or writer from store # required
